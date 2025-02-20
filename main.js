@@ -3,10 +3,10 @@ import { readWallets, readProxyFile } from "./utils/script.js";
 import banner from "./utils/banner.js";
 import log from "./utils/logger.js";
 import performTransactions from './utils/transactions.js';
-import { mintNft, signMessage } from './contract.js';
+// import { mintNft, signMessage } from './contract.js';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 
-const reffCode = `79022527-58f7-4562-8be8-396ff8bae49f`;
+const reffCode = `bfc7b70e-66ad-4524-9bb6-733716c4da94`;
 const proxyPath = 'proxy.txt';
 const decimal = 1000000000000000000;
 

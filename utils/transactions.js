@@ -3,15 +3,15 @@ import log from "./logger.js";
 
 // Configuration
 const provider = new ethers.JsonRpcProvider('https://sepolia.base.org');
-const contractAddress = '0x47129e886b44B5b8815e6471FCD7b31515d83242';
+const contractAddress = '0xF39635F2adF40608255779ff742Afe13dE31f577';
 const explorer = 'https://sepolia.basescan.org/tx/'
 const ApproveAmount = ethers.parseUnits('10000', 'ether');
 const depositAmount = ethers.parseUnits('0.01', 'ether');
 const minAmount = ethers.parseUnits('0.00001', 'ether');
 const tokens = [
     { address: '0x13e5fb0b6534bb22cbc59fae339dbbe0dc906871', name: 'wstETH' },
-    { address: '0x1aC493C87a483518642f320Ba5b342c7b78154ED', name: 'bondETH' },
-    { address: '0x975f67319f9DA83B403309108d4a8f84031538A6', name: 'levETH' },
+    { address: '0x5bd36745f6199cf32d2465ef1f8d6c51dca9bdee', name: 'bondETH' },
+    { address: '0x98f665d98a046fb81147879ecbe9a6ff68bc276c', name: 'levETH' },
 ];
 
 // ERC20 ABI
