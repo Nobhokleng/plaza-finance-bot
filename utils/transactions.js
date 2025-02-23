@@ -114,6 +114,18 @@ const redeem = async (contract, tokenType) => {
     }
 };
 
+const claim = async (contract, tokenType) => {
+    try {
+        const tx = await contract.redeem(tokenType, depositAmount, minAmount, {
+            gasLimit: '0x493e0',
+        });
+        await tx.wait();
+        log.info(`Redeem transaction confirmed. ${explorer}${tx.hash}`);
+    } catch (error) {
+        log.error('Error in redeem:', error);
+    }
+};
+
 // Run Transactions
 const runTransactions = async (privateKey, tokenType) => {
     const wallet = new ethers.Wallet(privateKey, provider);
