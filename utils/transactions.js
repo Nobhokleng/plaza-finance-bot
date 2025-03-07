@@ -2,8 +2,9 @@ import { ethers } from 'ethers';
 import log from "./logger.js";
 
 // Configuration
-const provider = new ethers.JsonRpcProvider('https://sepolia.base.org');
+const provider = new ethers.JsonRpcProvider('https://base-sepolia-rpc.publicnode.com');
 const contractAddress = '0xF39635F2adF40608255779ff742Afe13dE31f577';
+const contractSwap = "0x809daBC75201F92AC40973f22db37995676BaA04"
 const explorer = 'https://sepolia.basescan.org/tx/'
 const ApproveAmount = ethers.parseUnits('10000', 'ether');
 const depositAmount = ethers.parseUnits('0.01', 'ether');
@@ -69,14 +70,30 @@ const createABI = [
 const approveTokenIfNeeded = async (wallet, tokenAddress, tokenName) => {
     try {
         const tokenContract = new ethers.Contract(tokenAddress, erc20ABI, wallet);
-        const allowance = await tokenContract.allowance(wallet.address, contractAddress);
+        const allowance = await tokenContract.allowance(wallet.address, contractSwap);
 
         if (allowance > depositAmount) {
             return;
         }
 
-        const tx = await tokenContract.approve(contractAddress, ApproveAmount);
-        await tx.wait();
+        const feeData = await provider.getFeeData();
+        const price = feeData.gasPrice;
+        const increasedGasPrice = (price * BigInt(125)) / BigInt(100);
+
+        const tx = await tokenContract.approve(contractSwap, ApproveAmount, {
+            gasPrice: increasedGasPrice
+        });
+
+        log.info(`Approval transaction for ${tokenName} sent ${tx.hash}`);
+
+        const timeout = 60 * 1000;
+        const txPromise = tx.wait();
+
+        await Promise.race([
+            txPromise,
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Transaction timed out')), timeout))
+        ]);
+
         log.info(`Approval transaction for ${tokenName} confirmed ${explorer}${tx.hash}`);
     } catch (error) {
         log.error(`Error approving ${tokenName}:`, error);
@@ -93,9 +110,20 @@ const approveAllTokens = async (wallet) => {
 // Deposit and Redeem Functions
 const deposit = async (contract, tokenType) => {
     try {
-        const tx = await contract.create(tokenType, depositAmount, minAmount);
+        const price = (await provider.getFeeData()).gasPrice
+        const increasedGasPrice = (price * BigInt(125)) / BigInt(100);
+        const tx = await contract.create(tokenType, depositAmount, minAmount, {
+            gasPrice: increasedGasPrice
+        });
 
-        await tx.wait();
+        const timeout = 60 * 1000;
+        const txPromise = tx.wait();
+
+        await Promise.race([
+            txPromise,
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Transaction timed out')), timeout))
+        ]);
+
         log.info(`Deposit transaction confirmed ${explorer}${tx.hash}`);
     } catch (error) {
         log.error('Error in Deposit:', error);
@@ -104,10 +132,20 @@ const deposit = async (contract, tokenType) => {
 
 const redeem = async (contract, tokenType) => {
     try {
+        const price = (await provider.getFeeData()).gasPrice
+        const increasedGasPrice = (price * BigInt(125)) / BigInt(100);
         const tx = await contract.redeem(tokenType, depositAmount, minAmount, {
-            gasLimit: '0x493e0',
+            gasPrice: increasedGasPrice
         });
-        await tx.wait();
+
+        const timeout = 60 * 1000;
+        const txPromise = tx.wait();
+
+        await Promise.race([
+            txPromise,
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Transaction timed out')), timeout))
+        ]);
+        
         log.info(`Redeem transaction confirmed. ${explorer}${tx.hash}`);
     } catch (error) {
         log.error('Error in redeem:', error);
