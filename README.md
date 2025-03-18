@@ -39,7 +39,7 @@ Plaza is a platform for programmable derivatives built as a set of Solidity smar
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/keo-dara/PlazaFinance-New
+   git clone https://github.com/Nobhokleng/plaza-finance-bot
    cd PlazaFinance-New
    ```
 2. Install dependencies:
