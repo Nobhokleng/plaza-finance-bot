@@ -29,6 +29,19 @@ export function readProxyFile(filePath) {
         return [];
     }
 }
+export function readUserAgentFile(filePath) {
+    try {
+        const data = fs.readFileSync(filePath, 'utf-8');
+        const userAgentArray = data.split('\n').map(line => line.trim()).filter(line => line);
+        if (userAgentArray.length === 0) {
+            log.warn('No user agent found in the file.');
+        }
+        return userAgentArray;
+    } catch (error) {
+        log.error('Error reading user agent file:', error);
+        return [];
+    }
+}
 
 // Read wallets from wallets.json
 export function readWallets() {

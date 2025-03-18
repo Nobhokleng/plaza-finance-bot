@@ -4,10 +4,17 @@ Plaza is a platform for on-chain bonds and leverage on Base.
 
 Plaza is a platform for programmable derivatives built as a set of Solidity smart contracts on Base. It offers two core products: bondETH and levETH, which are programmable derivatives of a pool of ETH liquid staking derivatives (LSTs) and liquid restaking derivatives (LRTs) such as wstETH. Users can deposit an underlying pool asset like wstETH and receive levETH or bondETH in return, which are represented as ERC20 tokens. These tokens are composable with protocols such as DEXes, lending markets, restaking platforms, etc.
 
-- Website [https://testnet.plaza.finance/](https://testnet.plaza.finance/rewards/thtlP8i4fgzf)
+- Website [https://testnet.plaza.finance/](https://testnet.plaza.finance/rewards/GD7UtSTaYphb)
 - Twitter [@plaza_finance](https://x.com/plaza_finance)
 
 ## Update 
+- for now we need to manually claim eth base sepolia testnet
+- claim faucet eth here https://www.alchemy.com/faucets/base-sepolia
+- distribute eth base sepolia to all wallets in wallets.json
+- ```bash
+   npm run faucet
+   ```
+- thats it now you can rerun bot again, `npm run start`
 
 - must reinstall dependencies after `git pull` : `npm install` 
 - auto send now being sent from wallet to wallet, not from main wallet to all wallets.
@@ -32,7 +39,7 @@ Plaza is a platform for programmable derivatives built as a set of Solidity smar
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/airdropinsiders/PlazaFinance-New.git
+   git clone https://github.com/keo-dara/PlazaFinance-New
    cd PlazaFinance-New
    ```
 2. Install dependencies:
